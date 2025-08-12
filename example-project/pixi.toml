@@ -1,0 +1,11 @@
+[workspace]
+authors = ["anil80531 <anil80531@gmail.com>"]
+channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
+name = "example-project"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+modular = "25.5.*"
