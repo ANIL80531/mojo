@@ -45,7 +45,28 @@ def main():
     # Structs are blueprint (like a word doc template)
         # struct keep related data neatly bundled together
     # I don't understand struct & traits find good material.
-
-trait SomeTrait:
+    # Traits implements generic functions(single implementation with methods over multiple
+        # input data types) for structs.
+    """
+    trait SomeTrait:
     fn required_method(self, x: Int): ...
     # 3 dots mean method is not implemented.
+    """
+
+    # In Mojo, a parameter is a compile-time variable that becomes a runtime constant, and
+        # it's declared in square brackets on a function or struct.
+        # Parameters allow for compile-time metaprogramming, which means you can generate or
+        # modify code at compile time.
+
+    # when we say things like "parameter" and "parametric function,"
+    # we're talking about these compile-time parameters.
+    # Whereas, a function "argument" is a runtime value that's declared in parentheses.
+    def repeat[count: Int](msg: String):
+        @parameter # evaluate the following for loop at compile time
+        for i in range(count):
+            print(msg)
+
+    repeat[3]("Hi...")
+    # Mojo supports the ability to import Python modules as-is,
+    # so you can leverage existing Python code right away.
+
