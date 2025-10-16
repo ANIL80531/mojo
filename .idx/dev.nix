@@ -6,7 +6,8 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.gcc
-    # pkgs.python311
+    pkgs.llvm_18
+    pkgs.lld_18
     # pkgs.python311Packages.pip
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
