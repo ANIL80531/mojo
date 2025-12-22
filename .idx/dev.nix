@@ -8,6 +8,7 @@
     pkgs.gcc
     pkgs.llvm_18
     pkgs.lld_18
+    pkgs.openssh
     # pkgs.python311Packages.pip
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
@@ -41,8 +42,6 @@
       onCreate = {
         # Example: install JS dependencies from NPM
         # npm-install = "npm install";
-        # Open editors for the following files by default, if they exist:
-        default.openFiles = [ ".idx/dev.nix" "README.md" ];
       };
       # Runs when the workspace is (re)started
       onStart = {
