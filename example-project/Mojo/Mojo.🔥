@@ -1,49 +1,96 @@
-﻿Mojo🔥language basics
-Mojo🔥 programming language is the first systems programming language built from the ground-up using MLIR-a modern compiler infrastructure for heterogeneous hardware (CPUs, GPUs, ASICs or AI chips). That means you can use one language to write all your code, from high-level AI applications all the way down to low-level GPU kernels, without using any hardware-specific libraries (such as CUDA and ROCm).
-• Python syntax & interop: Mojo adopts (and extends) Python's syntax and integrates with existing Python ecosystem, including its wealth of AI libraries. Mojo's interoperability works in both directions, so you can import Python libraries into Mojo and create Mojo bindings to call from Python.
-• Struct-based types: All data types are defined as structs (including basic types such as String and Int). No types are built into the language itself. That means you can define your own types that have all the the same capabilities as the standard library types.
-• Zero-cost traits: Mojo's trait system solves the problem of static typing by letting you define a shared set of behaviors that types (structs) can implement. It allows you to write functions that depend on traits rather than specific types,  except with compile-time type checking and no run-time performance cost.
-• Value ownership: Mojo's ownership system ensures that only one variable "owns" a specific value at a given time-such that Mojo can safely deallocate the value when the owner's lifetime ends-while still allowing you to share references to the value. This provides safety from errors such as use-after-free, double-free, and memory leaks without the overhead cost of a garbage collector. 
-• Compile-time metaprogramming: Mojo's parameterization system enables powerful metaprogramming in which the compiler generates a unique version of a type or function based on parameter values.
-• Hardware portability: Mojo compiler makes no assumptions about whether your code is written for CPUs, GPUs, or something else. Instead, hardware behaviors are handled by Mojo libraries, as demonstrated by types such as SIMD that allows you to write vectorized code for CPUs, and the GPU package that enables hardware-agnostic GPU programming.
-Mojo incorporates features like static type checking, memory safety.
+﻿Mojo🔥Systems programming language built using MLIR.
+MLIR - a modern compiler infrastructure for heterogeneous hardware (CPUs, GPUs, ASICs or AI chips).
+That means you can use one language to write all your code, from high-level AI applications to
+all the way down to low-level GPU kernels, without using any hardware-specific libraries
+(such as CUDA and ROCm).
+• Python syntax & interop:
+    Mojo adopts (and extends) Python's syntax and integrates with existing Python ecosystem,
+    including its wealth of AI libraries. Mojo's interoperability works in both directions,
+    so you can import Python libraries into Mojo and create Mojo bindings to call from Python.
+• Struct-based types: 
+    All data types are defined as structs (including basic types such as String and Int). 
+    No types are built into the language itself. That means you can define your own types 
+    that have all the the same capabilities as the standard library types.
+• Zero-cost traits:
+    Mojo's trait system solves the problem of static typing by letting you define a shared
+    set of behaviors that types (structs) can implement. It allows you to write functions
+    that depend on traits rather than specific types, except with compile-time type checking
+    and no run-time performance cost.
+• Value ownership:
+    Mojo's ownership system ensures that only one variable "owns" a specific value at a given
+    time-such that Mojo can safely deallocate the value when the owner's lifetime ends-while
+    still allowing you to share references to the value. This provides safety from errors such
+    as use-after-free, double-free, and memory leaks without the overhead cost of a garbage collector.
+    Mojo incorporates features like static type checking, memory safety.
+• Compile-time metaprogramming: 
+    Mojo's parameterization system enables powerful metaprogramming in
+    which the compiler generates a unique version of a type or function based on parameter values.
+• Hardware portability:
+    Mojo compiler makes no assumptions about whether your code is written for CPUs, GPUs, or
+    something else. Instead, hardware behaviors are handled by Mojo libraries, as demonstrated
+    by types such as SIMD that allows you to write vectorized code for CPUs, and the GPU package
+    that enables hardware-agnostic GPU programming.
+
 def main():
     print("Hello, world!")
-Every Mojo program must include a function named main() as the entry point, write def main(): followed by an indented function body. The print() statement prints its arguments to the standard output.
-Variables​
+
+Every Mojo program must include a function named main() as the entry point,
+write def main(): followed by an indented function body.
+The print() statement prints its arguments to the standard output.
+
+Variables
 Declare a variable by simply assigning a value to a new named variable:
+
 def main():
     x = 10
     y = x * x
     print(y)
+
 You can also explicitly declare variables with the var keyword:
+
 var x = 10
+
 When declaring a variable with var, you can also declare a variable type, with or without an assignment:
+
 def main():
     var x: Int = 10
     var sum: Int
     sum = x + x
-Both implicitly declared and explicitly declared variables are statically typed: that is, the type is set at compile time, and doesn't change at runtime. If you don't specify a type, Mojo uses the type of the first value assigned to the variable.
+
+Both implicitly declared and explicitly declared variables are statically typed:
+that is, the type is set at compile time, and doesn't change at runtime.
+If you don't specify a type, Mojo uses the type of the first value assigned to the variable.
+
 x = 10
 x = "Foo" # Error: Cannot convert "StringLiteral" value to "Int"
+
 Blocks and statements​
-Code blocks such as functions, conditions, and loops are defined with a colon followed by indented lines. For example:
+Code blocks such as functions, conditions, and loops are defined with a colon followed by indented lines.
+For example:
+
 def loop():
     for x in range(5):
         if x % 2 == 0:
             print(x)
+
 You can use any number of spaces or tabs for your indentation (we prefer 4 spaces).
-All code statements in Mojo end with a newline. However, statements can span multiple lines if you indent the following lines. For example, this long string spans two lines:
+All code statements in Mojo end with a newline. However, statements can span multiple lines if you
+indent the following lines. For example, this long string spans two lines:
+
 def print_line():
     long_text = "This is a long line of text that is a lot easier to read if"
                 " it is broken up across two lines instead of one long line."
     print(long_text)
+
 And you can chain function calls across lines:
+
 def print_hello():
     text = ",".join("Hello", " world!")
     print(text)
+
 Functions​
-You can define a Mojo function using either the def or fn keyword. For example, the following uses the def keyword to define a function named greet that requires a single String argument and returns a String:
+You can define a Mojo function using either the def or fn keyword. For example, the following uses the
+def keyword to define a function named greet that requires a single String argument and returns a String:
 def greet(name: String) -> String:
     return "Hello, " + name + "!"
 Where def and fn differ is error handling and argument mutability defaults.
@@ -681,7 +728,39 @@ The standard library also includes many more types that you can import as needed
 Numeric types​
 Mojo's most basic numeric type is Int, which represents a signed integer of the largest size supported by the system-typically 64 bits or 32 bits.
 Mojo also has built-in types for integer, unsigned integer, and floating-point values of various precisions:
-Type nameDescriptionInt88-bit signed integerUInt88-bit unsigned integerInt1616-bit signed integerUInt1616-bit unsigned integerInt3232-bit signed integerUInt3232-bit unsigned integerInt6464-bit signed integerUInt6464-bit unsigned integerInt128128-bit signed integerUInt128128-bit unsigned integerInt256256-bit signed integerUInt256256-bit unsigned integerFloat1616-bit floating point number (IEEE 754-2008 binary16)Float3232-bit floating point number (IEEE 754-2008 binary32)Float6464-bit floating point number (IEEE 754-2008 binary64)Table 1. Numeric types with specific precision 
+Type name
+Description
+Int8
+8-bit signed integer
+UInt8
+8-bit unsigned integer
+Int16
+16-bit signed integer
+UInt16
+16-bit unsigned integer
+Int32
+32-bit signed integer
+UInt32
+32-bit unsigned integer
+Int64
+64-bit signed integer
+UInt64
+64-bit unsigned integer
+Int128
+128-bit signed integer
+UInt128
+128-bit unsigned integer
+Int256
+256-bit signed integer
+UInt256
+256-bit unsigned integer
+Float16
+16-bit floating point number (IEEE 754-2008 binary16)
+Float32
+32-bit floating point number (IEEE 754-2008 binary32)
+Float64
+64-bit floating point number (IEEE 754-2008 binary64)
+Table 1. Numeric types with specific precision 
 The types in Table 1 are actually all aliases to a single type, SIMD, which is discussed later.
 All of the numeric types support the usual numeric and bitwise operators. The math module provides a number of additional math functions.
 You may wonder when to use Int and when to use the other integer types. In general, Int is a good safe default when you need an integer type and you don't require a specific bit width. Using Int as the default integer type for APIs makes APIs more consistent and predictable.
@@ -695,7 +774,23 @@ When an unsigned integer overflows outside the range of values that its type can
 Floating-point numbers​
 Floating-point types represent real numbers. Because not all real numbers can be expressed in a finite number of bits, floating-point numbers can't represent every value exactly.
 The floating-point types listed in Table 1-Float64, Float32, and Float16-follow the IEEE 754-2008 standard for representing floating-point values. Each type includes a sign bit, one set of bits representing an exponent, and another set representing the fraction or mantissa. Table 2 shows how each of these types are represented in memory.
-Type nameSignExponentMantissaFloat641 bit11 bits52 bitsFloat321 bit8 bits23 bitsFloat161 bit5 bits10 bitsTable 2. Details of floating-point types 
+Type name
+Sign
+Exponent
+Mantissa
+Float64
+1 bit
+11 bits
+52 bits
+Float32
+1 bit
+8 bits
+23 bits
+Float16
+1 bit
+5 bits
+10 bits
+Table 2. Details of floating-point types 
 Numbers with exponent values of all ones or all zeros represent special values, allowing floating-point numbers to represent infinity, negative infinity, signed zeros, and not-a-number (NaN). For more details on how numbers are represented, see IEEE 754 on Wikipedia.
 A few things to note with floating-point values:
 * Rounding errors. Rounding may produce unexpected results. For example, 1/3 can't be represented exactly in these floating-point formats. The more operations you perform with floating-point numbers, the more the rounding errors accumulate.
@@ -710,9 +805,27 @@ Numeric literals​
 In addition to these numeric types, the standard libraries provides integer and floating-point literal types, IntLiteral and FloatLiteral.
 These literal types are used at compile time to represent literal numbers that appear in the code. In general, you should never instantiate these types yourself.
 Table 3 summarizes the literal formats you can use to represent numbers.
-FormatExamplesNotesInteger literal1760Integer literal, in decimal format.Hexadecimal literal0xaa, 0xFFInteger literal, in hexadecimal format.
-Hex digits are case-insensitive.Octal literal0o77Integer literal, in octal format.Binary literal0b0111Integer literal, in binary format.Floating-point literal3.14, 1.2e9Floating-point literal.
-Must include the decimal point to be interpreted as floating-point.Table 3. Numeric literal formats 
+Format
+Examples
+Notes
+Integer literal
+1760
+Integer literal, in decimal format.
+Hexadecimal literal
+0xaa, 0xFF
+Integer literal, in hexadecimal format.
+Hex digits are case-insensitive.
+Octal literal
+0o77
+Integer literal, in octal format.
+Binary literal
+0b0111
+Integer literal, in binary format.
+Floating-point literal
+3.14, 1.2e9
+Floating-point literal.
+Must include the decimal point to be interpreted as floating-point.
+Table 3. Numeric literal formats 
 At compile time, the literal types are arbitrary-precision (also called infinite-precision) values, so the compiler can perform compile-time calculations without overflow or rounding errors.
 At runtime the values are converted to finite-precision types-Int for integer values, and Float64 for floating-point values. (This process of converting a value that can only exist at compile time into a runtime value is called materialization.)
 The following code sample shows the difference between an arbitrary-precision calculation and the same calculation done using Float64 values at runtime, which suffers from rounding errors.
@@ -979,7 +1092,58 @@ Operators and expressions​
 This section lists the operators that Mojo supports, their order or precedence and associativity, and describes how these operators behave with several commonly used built-in types.
 Operator precedence and associativity​
 The table below lists the various Mojo operators, along with their order of precedence and associativity (also referred to as grouping). This table lists operators from the highest precedence to the lowest precedence.
-OperatorsDescriptionAssociativity (Grouping)()Parenthesized expressionLeft to rightx[index], x[index:index]Subscripting, slicingLeft to right**ExponentiationRight to left+x, -x, ~xPositive, negative, bitwise NOTRight to left*, @, /, //, %Multiplication, matrix multiplication, division, floor division, remainderLeft to right+, -Addition and subtractionLeft to right<<, >>ShiftsLeft to right&Bitwise ANDLeft to right^Bitwise XORLeft to right|Bitwise ORLeft to rightin, not in, is, is not, <, <=, >, >=, !=, ==Comparisons, membership tests, identity testsLeft to Rightnot xBoolean NOTRight to leftx and yBoolean ANDLeft to rightx or yBoolean ORLeft to rightif-elseConditional expressionRight to left:=Assignment expression (walrus operator)Right to leftMojo supports the same operators as Python (plus a few extensions), and they have the same precedence levels. For example, the following arithmetic expression evaluates to 40:
+Operators
+Description
+Associativity (Grouping)
+()
+Parenthesized expression
+Left to right
+x[index], x[index:index]
+Subscripting, slicing
+Left to right
+**
+Exponentiation
+Right to left
++x, -x, ~x
+Positive, negative, bitwise NOT
+Right to left
+*, @, /, //, %
+Multiplication, matrix multiplication, division, floor division, remainder
+Left to right
++, -
+Addition and subtraction
+Left to right
+<<, >>
+Shifts
+Left to right
+&
+Bitwise AND
+Left to right
+^
+Bitwise XOR
+Left to right
+|
+Bitwise OR
+Left to right
+in, not in, is, is not, <, <=, >, >=, !=, ==
+Comparisons, membership tests, identity tests
+Left to Right
+not x
+Boolean NOT
+Right to left
+x and y
+Boolean AND
+Left to right
+x or y
+Boolean OR
+Left to right
+if-else
+Conditional expression
+Right to left
+:=
+Assignment expression (walrus operator)
+Right to left
+Mojo supports the same operators as Python (plus a few extensions), and they have the same precedence levels. For example, the following arithmetic expression evaluates to 40:
 5 + 4 * 3 ** 2 - 1
 It is equivalent to the following parenthesized expression to explicitly control the order of evaluation:
 (5 + (4 * (3 ** 2))) - 1
@@ -1357,7 +1521,15 @@ When you create a custom struct, Mojo allows you to define the behavior of many 
 Currently, Mojo doesn't support defining arbitrary custom operators (for example, -^-). You can define behaviors for only the operators listed in the following subsections.
 Unary operator dunder methods​
 A unary operator invokes an associated dunder method on the value to which it applies. The supported unary operators and their corresponding methods are shown in the table below.
-OperatorDunder method+ positive__pos__()- negative__neg__()~ bitwise NOT__invert__()For each of these methods that you decide to implement, you should return either the original value if unchanged, or a new value representing the result of the operator. For example, you could implement the - negative operator for a MyInt struct like this:
+Operator
+Dunder method
++ positive
+__pos__()
+- negative
+__neg__()
+~ bitwise NOT
+__invert__()
+For each of these methods that you decide to implement, you should return either the original value if unchanged, or a new value representing the result of the operator. For example, you could implement the - negative operator for a MyInt struct like this:
 @fieldwise_init
 struct MyInt:
     var value: Int
@@ -1371,7 +1543,63 @@ If Mojo doesn't find a matching "normal" dunder method on the left-hand side val
 For both the normal and the reflected versions, the dunder method should return a new value representing the result of the operator.
 Additionally, there are dunder methods corresponding to the in-place assignment versions of the operators. These methods receive the right-hand side value as an argument and the methods should modify the existing left-hand side value to reflect the result of the operator.
 The table below lists the various binary arithmetic, shift, and bitwise operators and their corresponding normal, reflected, and in-place dunder methods.
-OperatorNormalReflectedIn-place+ addition__add__()__radd__()__iadd__()- subtraction__sub__()__rsub__()__isub__()* multiplication__mul__()__rmul__()__imul__()/ division__truediv__()__rtruediv__()__itruediv__()// floor division__floordiv__()__rfloordiv__()__ifloordiv__()% modulus/remainder__mod__()__rmod__()__imod__()** exponentiation__pow__()__rpow__()__ipow__()@ matrix multiplication__matmul__()__rmatmul__()__imatmul__()<< left shift__lshift__()__rlshift__()__ilshift__()>> right shift__rshift__()__rrshift__()__irshift__()& bitwise AND__and__()__rand__()__iand__()| bitwise OR__or__()__ror__()__ior__()^ bitwise XOR__xor__()__rxor__()__ixor__()As an example, consider implementing support for all of the + operator dunder methods for a custom MyInt struct. This shows supporting adding two MyInt instances as well as adding a MyInt and an Int. We can support the case of having the Int as the right-hand side argument by overloaded the definition of __add__(). But to support the case of having the Int as the left-hand side argument, we need to implement an __radd__() method, because the built-in Int type doesn't have an __add__() method that supports our custom MyInt type.
+Operator
+Normal
+Reflected
+In-place
++ addition
+__add__()
+__radd__()
+__iadd__()
+- subtraction
+__sub__()
+__rsub__()
+__isub__()
+* multiplication
+__mul__()
+__rmul__()
+__imul__()
+/ division
+__truediv__()
+__rtruediv__()
+__itruediv__()
+// floor division
+__floordiv__()
+__rfloordiv__()
+__ifloordiv__()
+% modulus/remainder
+__mod__()
+__rmod__()
+__imod__()
+** exponentiation
+__pow__()
+__rpow__()
+__ipow__()
+@ matrix multiplication
+__matmul__()
+__rmatmul__()
+__imatmul__()
+<< left shift
+__lshift__()
+__rlshift__()
+__ilshift__()
+>> right shift
+__rshift__()
+__rrshift__()
+__irshift__()
+& bitwise AND
+__and__()
+__rand__()
+__iand__()
+| bitwise OR
+__or__()
+__ror__()
+__ior__()
+^ bitwise XOR
+__xor__()
+__rxor__()
+__ixor__()
+As an example, consider implementing support for all of the + operator dunder methods for a custom MyInt struct. This shows supporting adding two MyInt instances as well as adding a MyInt and an Int. We can support the case of having the Int as the right-hand side argument by overloaded the definition of __add__(). But to support the case of having the Int as the left-hand side argument, we need to implement an __radd__() method, because the built-in Int type doesn't have an __add__() method that supports our custom MyInt type.
 @fieldwise_init
 struct MyInt:
     var value: Int
@@ -1394,7 +1622,21 @@ Comparison operator dunder methods​
 When you have a comparison expression like a < b, Mojo invokes as associated dunder method on the left-hand side value and passes the right-hand side value as an argument. Mojo doesn't support "reflected" versions of these dunder methods because you should only compare values of the same type. The comparison dunder methods must return a Bool result representing the result of the comparison.
 There are two traits associated with the comparison dunder methods. A type that implements the Comparable trait defines all of the comparison methods, and authors are required to implement at least the "less-than" and "equal" methods, since the trait provides defaults for the rest. However, some types don't have a natural ordering (for example, complex numbers). For those types you can decide to implement the Equatable trait, which defines only the "equal" and "not equal" comparison methods, with "equal" being required to implement by conforming structs.
 The supported comparison operators and their corresponding methods are shown in the table below.
-OperatorDunder method== equal__eq__()!= not equal__ne__()< less than__lt__()<= less than or equal__le__()> greater than__gt__()>= greater than or equal__ge__()The Comparable and Equatable traits don't allow the comparison dunder methods to raise errors. Because using def to define a method implies that it can raise an error, you must use fn to implement the comparison methods declared by these traits. See Functions for more information on the differences between defining functions with def and fn.
+Operator
+Dunder method
+== equal
+__eq__()
+!= not equal
+__ne__()
+< less than
+__lt__()
+<= less than or equal
+__le__()
+> greater than
+__gt__()
+>= greater than or equal
+__ge__()
+The Comparable and Equatable traits don't allow the comparison dunder methods to raise errors. Because using def to define a method implies that it can raise an error, you must use fn to implement the comparison methods declared by these traits. See Functions for more information on the differences between defining functions with def and fn.
 As an example, consider implementing support for all of the comparison operator dunder methods for a custom MyInt struct by relying on the default implementations provided by the Comparable (and transitively the Equatable) traits.
 @fieldwise_init
 struct MyInt(Comparable):
@@ -4736,7 +4978,47 @@ The Mojo standard library includes several pointer types with different characte
 * ArcPointer is a reference-counted smart pointer that points to an owned value with ownership potentially shared with other instances of ArcPointer.
 * UnsafePointer points to one or more consecutive memory locations, and can refer to uninitialized memory.
 Table 1 summarizes the different types of pointers:
-PointerOwnedPointerArcPointerUnsafePointerSafeYesYesYesNoAllocates memoryNoImplicitly 1Implicitly 1ExplicitlyOwns pointee(s)NoYesYesNo 2CopyableYesNo 3YesYesNullableNoNoNoYesCan point to uninitialized memoryNoNoNoYesCan point to multiple values (array-like access)NoNoNoYesTable 1. Pointer types 
+
+Pointer
+OwnedPointer
+ArcPointer
+UnsafePointer
+Safe
+Yes
+Yes
+Yes
+No
+Allocates memory
+No
+Implicitly 1
+Implicitly 1
+Explicitly
+Owns pointee(s)
+No
+Yes
+Yes
+No 2
+Copyable
+Yes
+No 3
+Yes
+Yes
+Nullable
+No
+No
+No
+Yes
+Can point to uninitialized memory
+No
+No
+No
+Yes
+Can point to multiple values (array-like access)
+No
+No
+No
+Yes
+Table 1. Pointer types 
 1 OwnedPointer and ArcPointer implicitly allocate memory when you initialize the pointer with a value.
 2 UnsafePointer provides unsafe methods for initializing and destroying instances of the stored type. The user is responsible for managing the lifecycle of stored values.
 3 OwnedPointer is explicitly copyable, but explicitly copying an OwnedPointer copies the stored value into a new OwnedPointer.
@@ -5269,7 +5551,19 @@ For both grid_dim and block_dim, you express the size in the x, y, and z dimensi
 
 Figure 1. Organization of thread blocks and threads within a grid. 
 From within a kernel function, you can access the grid and thread block dimensions and the assigned thread block and thread indices of the individual threads executing the kernel using the following structures:
-Struct aliasDescriptiongrid_dimDimensions of the grid as x, y, and z values (for example, grid_dim.y).block_dimDimensions of the thread block as x, y, and z values.block_idxIndex of the block within the grid as x, y, and z values.thread_idxIndex of the thread within the block as x, y, and z values.global_idxThe global offset of the thread as x, y, and z values. That is, global_idx.x = block_dim.x * block_idx.x + thread_idx.x, global_idx.y = block_dim.y * block_idx.y + thread_idx.y, and global_idx.z = block_dim.z * block_idx.z + thread_idx.z.All of these dimensions and indices are UInt values.
+Struct alias
+Description
+grid_dim
+Dimensions of the grid as x, y, and z values (for example, grid_dim.y).
+block_dim
+Dimensions of the thread block as x, y, and z values.
+block_idx
+Index of the block within the grid as x, y, and z values.
+thread_idx
+Index of the thread within the block as x, y, and z values.
+global_idx
+The global offset of the thread as x, y, and z values. That is, global_idx.x = block_dim.x * block_idx.x + thread_idx.x, global_idx.y = block_dim.y * block_idx.y + thread_idx.y, and global_idx.z = block_dim.z * block_idx.z + thread_idx.z.
+All of these dimensions and indices are UInt values.
 Here is a complete example showing a kernel function that simply prints the thread block index, thread index, and global index for each thread executed.
 print_threads.mojo
 from sys import exit, has_accelerator, has_apple_gpu_accelerator
@@ -5347,7 +5641,22 @@ Passing data between CPU and GPU​
 All values passed to a kernel function must be of types that conform to the DevicePassable trait. The trait declares an associated alias named device_type that maps the type as used on the CPU host to a corresponding type used on the GPU device.
 As an example, DeviceBuffer is a host-side representation of a buffer located in the GPU's global memory space. But it defines its device_type associated alias as UnsafePointer, so the data represented by a DeviceBuffer is actually passed to the kernel function as a value of type UnsafePointer. The next section, DeviceBuffer and HostBuffer , describes in more detail how to allocate memory buffers on the host and device and to exchange blocks of data between host and device.
 The following table lists the most commonly used types in the Mojo libraries that conform to the DevicePassable trait.
-Host typeDevice TypeDescriptionIntIntSigned integerSIMD[dtype, width]SIMD[dtype, width]Small vector backed by a hardware vector elementDeviceBuffer[dtype]UnsafePointer[SIMD[dtype, 1]]Memory buffer of dtype valuesLayoutTensorLayoutTensorA powerful abstraction for multi-dimensional data. See Using LayoutTensor for more information.DeviceBuffer and HostBuffer​
+Host type
+Device Type
+Description
+Int
+Int
+Signed integer
+SIMD[dtype, width]
+SIMD[dtype, width]
+Small vector backed by a hardware vector element
+DeviceBuffer[dtype]
+UnsafePointer[SIMD[dtype, 1]]
+Memory buffer of dtype values
+LayoutTensor
+LayoutTensor
+A powerful abstraction for multi-dimensional data. See Using LayoutTensor for more information.
+DeviceBuffer and HostBuffer​
 This section describes how to use DeviceBuffer and HostBuffer to allocate memory on the device and host respectively, and to copy data between device and host memory.
 Creating a DeviceBuffer​
 The DeviceBuffer type represents a block of device memory associated with a particular DeviceContext. Specifically, the buffer is located in the device's global memory space. As such, the buffer is accessible by all threads of all kernel functions executed by the DeviceContext.
@@ -5912,7 +6221,43 @@ If all of those modes are swimming before your eyes, take a moment to study the 
 Coordinates​
 Coordinates for layouts can be written in the same format as the shape tuple. For example, coordinates for layout B above can be written ((i, j), (k, l)). However, this layout can also be addressed as a logical 2D matrix, just like layout A. So ((0, 1), (0, 1)) and (2, 2) are both valid coordinates that map to the same index.
 In fact, this is true for any layout: the layout can be addressed with 1D or 2D coordinates as well as its "natural" coordinates. When mapping coordinates, the dimensions are traversed in colexicographical order (that is, a generalized column-major order, where the leftmost coordinate varies fastest). Table 1 shows how different 1D and 2D coordinates map to the "natural" coordinates of the ((2, 2), (2, 2)) shape shown above:
-1D2DNatural0(0, 0)((0, 0), (0, 0))1(1, 0)((1, 0), (0, 0))2(2, 0)((0, 1), (0, 0))3(3, 0)((1, 1), (0, 0))4(0, 1)((0, 0), (1, 0))5(1, 1)((1, 0), (1, 0))6(2, 1)((0, 1), (1, 0))7(3, 1)((1, 1), (1, 0))8(0, 2)((0, 0), (0, 1)).........15(3, 3)((1, 1), (1, 1))Table 1. Mapping between 1D, 2D, and natural coordinates 
+1D
+2D
+Natural
+0
+(0, 0)
+((0, 0), (0, 0))
+1
+(1, 0)
+((1, 0), (0, 0))
+2
+(2, 0)
+((0, 1), (0, 0))
+3
+(3, 0)
+((1, 1), (0, 0))
+4
+(0, 1)
+((0, 0), (1, 0))
+5
+(1, 1)
+((1, 0), (1, 0))
+6
+(2, 1)
+((0, 1), (1, 0))
+7
+(3, 1)
+((1, 1), (1, 0))
+8
+(0, 2)
+((0, 0), (0, 1))
+...
+...
+...
+15
+(3, 3)
+((1, 1), (1, 1))
+Table 1. Mapping between 1D, 2D, and natural coordinates 
 Making layouts​
 There are multiple ways to create layouts. The row_major() and col_major() static methods are probably the simplest ways to create a layout. The row_major() method creates a generalized row-major layout: that is, the rightmost coordinate varies the fastest. The col_major() method creates a generalized column-major layout, where the leftmost coordinate varies the fastest.
 print(Layout.row_major(4, 4, 4))

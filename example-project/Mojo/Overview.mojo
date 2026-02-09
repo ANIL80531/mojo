@@ -9,21 +9,13 @@ def main():
     z = 10
     # z = "foo" wrong type of first value assigned, type change is not allowed
     print(z)
-    # Code blocks such as functions, conditions, and loops are defined with a colon followed by indented lines (4 spaces).
+
     def loop():
         for x in range(5):
             if x % 2 == 0:
                 print(x)
-                # All statements end with a blank line.
 
     loop()
-
-    #def print_hello():
-    #    text = "Hello,".join(" world!")
-    #    print(text)
-    
-    #print_hello()
-    
 
     def print_line():
         long_text = "This is a long line of text that is a lot easier to read if"
@@ -32,26 +24,25 @@ def main():
     
     print_line()
 
-
-
-
     fn greet(name: String) -> String:
         return "Hello, " + name + "!"
 
-    a = greet(name = "world")
+    a = greet(name = "Nityansh")
     print(a)
 
-    # Mojo structs are completely static—they are bound at compile-time, so they do not allow dynamic dispatch or any runtime changes to the structure.
+    # Mojo structs are completely static—they are bound at compile-time,
+    # so they do not allow dynamic dispatch or any runtime changes to the structure.
     # Structs are blueprint (like a word doc template)
-        # struct keep related data neatly bundled together
+    # struct keep related data neatly bundled together
     # I don't understand struct & traits find good material.
     # Traits implements generic functions(single implementation with methods over multiple
-        # input data types) for structs.
-    """
-    trait SomeTrait:
-    fn required_method(self, x: Int): ...
-    # 3 dots mean method is not implemented.
-    """
+    # input data types) for structs.
+    
+#    """
+#    trait SomeTrait:
+#    fn required_method(self, x: Int): ...
+#    # 3 dots mean method is not implemented.
+#    """
 
     # In Mojo, a parameter is a compile-time variable that becomes a runtime constant, and
         # it's declared in square brackets on a function or struct.
@@ -61,12 +52,10 @@ def main():
     # when we say things like "parameter" and "parametric function,"
     # we're talking about these compile-time parameters.
     # Whereas, a function "argument" is a runtime value that's declared in parentheses.
-    def repeat[count: Int](msg: String):
-        @parameter # evaluate the following for loop at compile time
-        for i in range(count):
-            print(msg)
+    
+def repeat[count: Int](msg: String):
+    @parameter # evaluate the following for loop at compile time
+    for i in range(count):
+        print(msg)
 
-    repeat[3]("Hi...")
-    # Mojo supports the ability to import Python modules as-is,
-    # so you can leverage existing Python code right away.
-
+#    repeat[3]("Hi...")

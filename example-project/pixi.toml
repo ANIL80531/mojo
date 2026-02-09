@@ -6,6 +6,3 @@ platforms = ["linux-64"]
 version = "0.1.0"
 
 [tasks]
-
-[dependencies]
-modular = ">=26.1.0.dev2025112205,<27"
